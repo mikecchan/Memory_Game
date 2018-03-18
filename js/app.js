@@ -1,6 +1,13 @@
+import Timer from '/easytimer/easytimer';
+
+var comparison_card;
+var found_count = 0;
+var stars;
+var continue_game = true;
+var time_started = false;
+
 function setup(){
   console.log("setup()");
-  moves = document.getElementsByClassName("moves").innerHTML;
   stars = document.getElementsByClassName("stars");
   var array = shuffle(list);
   createHTML(array);
@@ -50,11 +57,8 @@ function shuffle(array) {
 
 function createHTML(list){
   console.log("createHTML()");
-  console.log(list);
   var deck_class = document.getElementsByClassName("deck")[0];
   for (var i of list) {
-    //creating the 'li' element first
-    console.log(i);
     var li_node = document.createElement('li');
     var li_node_att = document.createAttribute('class');
     li_node_att.value = "card";
@@ -73,8 +77,6 @@ function createHTML(list){
     li_node.addEventListener("click", card_clicked, false);
 
     //append the 'li' node to the 'deck' element
-    console.log(deck_class);
-
     deck_class.append(li_node);
   }
 
@@ -93,26 +95,22 @@ function createHTML(list){
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
- var comparison_card;
- var found_count = 0;
- var moves;
- var stars;
-
  function card_clicked(){
    console.log("card_clicked()");
-   console.log("displaying this...");
-   console.log(this);
-   var li_class= this.getAttribute("class");
-   //Can only check card if it is in face down.
-   //Can't do anything when it is faced up.
-   if (!li_class.includes("open")){
-     this.setAttribute("class", "card open show");
-     if (!comparison_card){
-       //If there is no card to compare, make it the compare card.
-       comparison_card = this;
-     }
-     else{
-       check_cards(this);
+   if (time_started == false){
+     start_time();
+   }
+   if (continue_game){
+     console.log( "this.getAttribute('class') is " + this.getAttribute("class"));
+     if (this.getAttribute("class") == "card"){
+       console.log("true");
+       this.setAttribute("class", "card open show");
+       if (!comparison_card){
+         comparison_card = this;
+       }
+       else{
+         check_cards(this);
+       }
      }
    }
  }
@@ -120,24 +118,23 @@ function createHTML(list){
  function check_cards(card){
    console.log("check_cards()");
    var childNode = card.children[0];
-   console.log(childNode);
-   var i_class = childNode.getAttribute("class");
-   console.log(i_class);
-   moves = moves + 1;
-
-   if (comparison_card == i_class){
+   var moves = parseInt(document.getElementsByClassName("moves")[0].innerHTML) + 1;
+   document.getElementsByClassName("moves")[0].innerHTML = moves;
+   console.log(moves);
+   console.log(comparison_card.firstElementChild.getAttribute("class"));
+   console.log(childNode.getAttribute("class"));
+   if (comparison_card.firstElementChild.getAttribute("class") == childNode.getAttribute("class")){
      console.log("matches!");
-     found_list.push(comparison_card);
-
      card.setAttribute("class", "card match");
      comparison_card.setAttribute("class", "card match");
      found_count += 1;
-     if (found_list.length == 16){
+     refill_stars();
+     console.log("found_count length is " + found_count);
+     if (found_count == 8){
        final_score();
      }
    }
    else{
-     console.log("BOO!!");
      comparison_card.setAttribute("class", "card");
      card.setAttribute("class", "card");
      remove_star();
@@ -147,19 +144,45 @@ function createHTML(list){
 
  function remove_star(){
    console.log("remove_star()");
-   console.log(stars[0].childNodes[1]);
-   //LEFT OFF HERE!!!
-   stars[0].childNodes[1].remove();
-   console.log("removed");
+   stars[0].removeChild(stars[0].firstElementChild);
    console.log(stars[0]);
-   var li_count = stars[0].length;
-   console.log(li_count);
-   if (li_count == 0){
+   if (stars[0].childElementCount == 0){
      alert("you lose");
+     continue_game = false;
    }
  }
 
+ function refill_stars(){
+   console.log("fill_back_stars()");
+   while (stars[0].childElementCount < 3){
+     var i_node = document.createElement('i');
+     var i_node_att = document.createAttribute('class');
+     i_node_att.value = "fa fa-star";
+     i_node.setAttributeNode(i_node_att);
+
+     var li_node = document.createElement('li');
+
+     li_node.append(i_node);
+
+     stars[0].append(li_node)
+   }
+   console.log(stars[0]);
+ }
+
  function final_score(){
-    console.log("final_score()");
     alert("You Won!");
+  }
+
+  function restart(){
+    location.reload();
+  }
+
+  function start_time(){
+    console.log("start_time()");
+    var timer = new Timer();
+    timer.start();
+    timer.addEventListener('secondsUpdated', function (e) {
+        $('#basicUsage').html(timer.getTimeValues().toString());
+    });
+    time_started = true;
   }
