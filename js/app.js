@@ -257,7 +257,7 @@ function check_cards(card){
     console.log("start_time()");
     let div_node = document.createElement("div");
     div_node.setAttribute("id", "basicUsage");
-    div_node.value = '00:00:00';
+    div_node.value = "00:00:00";
     let h2_node = document.createElement("h2");
     h2_node.append(div_node);
     header_tag.appendChild(h2_node);
