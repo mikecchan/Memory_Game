@@ -37,6 +37,7 @@ let header_tag = document.getElementsByTagName("header")[0];
 let comparing_wait = false;
 let moves = parseInt(document.getElementsByClassName("moves")[0].innerHTML);
 let deck_class = document.getElementsByClassName("deck")[0];
+let stars_qty = 8;
 const list =  ["fa fa-diamond",
             "fa fa-paper-plane-o",
             "fa fa-anchor",
@@ -57,6 +58,7 @@ const list =  ["fa fa-diamond",
 //setup() let's us setup the game onload.
 function setup(){
   console.log("setup()");
+  refill_stars();
   let array = shuffle(list);
   createHTML(array);
 }
@@ -156,8 +158,6 @@ function createHTML(list){
 */
 function check_cards(card){
    console.log("check_cards()");
-   console.log(card);
-   console.log("card.children[0] is " + card.children[0]);
    let childNode = card.children[0];
    moves += 1;
    document.getElementsByClassName("moves")[0].innerHTML = moves;
@@ -167,6 +167,7 @@ function check_cards(card){
      comparison_card.setAttribute("class", "card match");
      comparison_card = null;
      found_count += 1;
+     stars_qty -= 1;
      refill_stars();
      console.log("found_count length is " + found_count);
      if (found_count == 8){
@@ -175,8 +176,8 @@ function check_cards(card){
    }
    else{
      comparing_wait = true;
-     for (i=0 ; i < document.getElementsByClassName("deck")[0].children.length; i++){
-       document.getElementsByClassName("deck")[0].children[i].style.cursor = "not-allowed";
+     for (i=0 ; i < deck_class.children.length; i++){
+       deck_class.children[i].style.cursor = "not-allowed";
      }
      comparison_card.setAttribute("class", "card wrong");
      card.setAttribute("class", "card wrong");
@@ -187,8 +188,8 @@ function check_cards(card){
        comparison_card = null;
        remove_star();
        comparing_wait = false;
-       for (i=0 ; i < document.getElementsByClassName("deck")[0].children.length; i++){
-         document.getElementsByClassName("deck")[0].children[i].style.cursor = "";
+       for (i=0 ; i < stars_qty; i++){
+         deck_class.children[i].style.cursor = "";
        }
      }, 2000);
    }
@@ -228,18 +229,26 @@ function check_cards(card){
 
 /*
   refill_stars() When the player picks a pair, then the number of stars will
-  go back to 3.
+  go back to 14.
 */
  function refill_stars(){
    console.log("fill_back_stars()");
-   while (stars[0].childElementCount < 3){
-     let i_node = document.createElement("i");
-     let i_node_att = document.createAttribute("class");
-     i_node_att.value = "fa fa-star";
-     i_node.setAttributeNode(i_node_att);
-     let li_node = document.createElement("li");
-     li_node.append(i_node);
-     stars[0].append(li_node)
+   console.log(document.getElementsByClassName("score-panel"));
+   if (stars[0].childElementCount > stars_qty){
+     while (stars[0].childElementCount > stars_qty){
+       stars[0].remove(stars[0].lastElementChild);
+     }
+   }
+   else {
+     while (stars[0].childElementCount < stars_qty){
+       let i_node = document.createElement("i");
+       let i_node_att = document.createAttribute("class");
+       i_node_att.value = "fa fa-star";
+       i_node.setAttributeNode(i_node_att);
+       let li_node = document.createElement("li");
+       li_node.append(i_node);
+       stars[0].append(li_node)
+     }
    }
    console.log(stars[0]);
  }
