@@ -188,7 +188,7 @@ function check_cards(card){
        comparison_card = null;
        remove_star();
        comparing_wait = false;
-       for (i=0 ; i < stars_qty; i++){
+       for (i=0 ; i < deck_class.children.length; i++){
          deck_class.children[i].style.cursor = "";
        }
      }, 2000);
@@ -200,8 +200,9 @@ function check_cards(card){
  */
  function remove_star(){
    console.log("remove_star()");
-   stars[0].removeChild(stars[0].firstElementChild);
-   console.log(stars[0]);
+   console.log(stars);
+   stars[0].removeChild(stars[0].lastElementChild);
+   console.log(stars);
    if (stars[0].childElementCount == 0){
      final_score(false);
    }
@@ -234,12 +235,14 @@ function check_cards(card){
  function refill_stars(){
    console.log("fill_back_stars()");
    console.log(document.getElementsByClassName("score-panel"));
+   console.log(stars[0].childElementCount);
    if (stars[0].childElementCount > stars_qty){
      while (stars[0].childElementCount > stars_qty){
-       stars[0].remove(stars[0].lastElementChild);
+       stars[0].removeChild(stars[0].lastElementChild);
+       console.log(stars[0].childElementCount);
      }
    }
-   else {
+   else if (stars[0].childElementCount < stars_qty) {
      while (stars[0].childElementCount < stars_qty){
        let i_node = document.createElement("i");
        let i_node_att = document.createAttribute("class");
