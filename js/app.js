@@ -61,6 +61,7 @@ function setup(){
   refill_stars();
   let array = shuffle(list);
   createHTML(array);
+  console.log(document.getElementsByClassName("container"));
 }
 
 /*
@@ -215,17 +216,36 @@ function check_cards(card){
  function final_score(win){
    document.getElementById("basicUsage").id = "freeze_time";
    let final_time = document.getElementById("freeze_time").outerText;
-   let playAgain = false;
-   if (win == true){
-     playAgain = confirm("You Won with finished time of " + final_time + " and with " + moves + " moves.  Play Again?");
-   }
-   else{
-     playAgain = confirm("You lose.  Play Again?");
-   }
-   continue_game = false;
-   if (playAgain){
+   //let playAgain = false;
+   let modal = document.getElementById("myModal");
+   //let span = document.getElementsByClassName("close")[0];
+   let p = document.getElementById("p-modal-text");
+   let retry_btn = document.getElementById("retry_btn");
+   let cancel_btn = document.getElementById("cancel_btn");
+   retry_btn.onclick = function(){
      restart();
    }
+   cancel_btn.onclick = function(){
+     modal.style.display = "none";
+   }
+   window.onclick = function(event) {
+    if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+   let textNode;
+   if (win){
+     textNode = document.createTextNode("You Won with finished time of " + final_time + " and with " + moves + " moves.  Play Again?");
+     //playAgain = confirm("You Won with finished time of " + final_time + " and with " + moves + " moves.  Play Again?");
+   }
+   else{
+     textNode = document.createTextNode("You lose.  Play Again?");
+     //playAgain = confirm("You lose.  Play Again?");
+   }
+   p.appendChild(textNode);
+   //modal.appendChild(p);
+   modal.style.display = "block";
+   continue_game = false;
   }
 
 /*

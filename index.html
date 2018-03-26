@@ -8,6 +8,7 @@
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
     <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/modal.css">
     <script src="dist/examples.min.js"></script>
 </head>
 
@@ -25,6 +26,16 @@
         		<i class="fa fa-repeat"></i>
         	</div>
         </section>
+        <div id="myModal" class="modal">
+          <div class="modal-content">
+            <span class="modal-text">&times;</span>
+            <p id="p-modal-text"></p>
+            <div class="row">
+              <div class="col-sm-6"><button id="cancel_btn">Cancel</button></div>
+              <div class="col-sm-6"><button id="retry_btn">Play Again</button></div>
+            </div>
+          </div>
+        </div>
         <ul class="deck">
         </ul>
     </div>
