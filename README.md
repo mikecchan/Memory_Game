@@ -14,4 +14,4 @@ Each turn:
 
 ### To begin, please visit this link below...
 
-https://mikecchan.github.io/Udacity_Memory_Game_Project/
+https://mikecchan.github.io/Memory_Game/
